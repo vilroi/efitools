@@ -28,7 +28,6 @@ func extractBootVars(efivars efitools.EfiVars) efitools.EfiVars {
 	}
 
 	var bootvars efitools.EfiVars
-	var ordernum int
 	for i := 0; i < len(bootorder.Data); i += 2 {
 		val := uint16(bootorder.Data[i]) | (uint16(bootorder.Data[i+1]) << 8)
 		varname := fmt.Sprintf("Boot00%02X", val)
@@ -39,10 +38,6 @@ func extractBootVars(efivars efitools.EfiVars) efitools.EfiVars {
 			continue
 		}
 		bootvars = append(bootvars, bootvar)
-
-		// Debug
-		fmt.Printf("%d. %s\n", ordernum, varname)
-		ordernum++
 	}
 
 	return bootvars

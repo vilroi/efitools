@@ -124,6 +124,13 @@ func ParseLoadOption(data []byte) EfiLoadOption {
 
 	loadopt.Attr = binary.LittleEndian.Uint32(data[0:4])
 	loadopt.FilePathLen = binary.LittleEndian.Uint16(data[4:6])
+
+	// TODO: Temporary Hack.
+	// Find out why for some efi variables the File Path Length is listed as
+	// 0x0100, when clearly there is less data contained in the file
+	if loadopt.FilePathLen == 0x0100 {
+		loadopt.FilePathLen = 0x01
+	}
 	data = data[8:]
 
 	// Parse the description (null-terminated string).
@@ -142,6 +149,7 @@ func ParseLoadOption(data []byte) EfiLoadOption {
 	for i := 0; i < int(loadopt.FilePathLen); i++ {
 		devpath := parseDevicePath(data)
 		loadopt.FilePathList = append(loadopt.FilePathList, devpath)
+
 		offset = int(devpath.GetLength())
 		data = data[offset:]
 	}
