@@ -11,11 +11,13 @@ func main() {
 	efivars := efitools.GetEfiVars()
 
 	bootvars := extractBootVars(efivars)
+
 	for i, bootvar := range bootvars {
 		fmt.Printf("%s: ", bootvar.Name)
+
 		loadopt := efitools.ParseLoadOption(bootvar.Data)
+
 		fmt.Printf("%d: %s\n", i, loadopt.Desc)
-		//fmt.Printf("%d: %s\n", i, string(loadopt.OptData))
 	}
 }
 
@@ -28,7 +30,7 @@ func extractBootVars(efivars efitools.EfiVars) efitools.EfiVars {
 	var bootvars efitools.EfiVars
 	var ordernum int
 	for i := 0; i < len(bootorder.Data); i += 2 {
-		val := uint16(bootorder.Data[i]) | uint16(bootorder.Data[i+1]<<8)
+		val := uint16(bootorder.Data[i]) | (uint16(bootorder.Data[i+1]) << 8)
 		varname := fmt.Sprintf("Boot00%02X", val)
 
 		bootvar, ok := efivars.Search(varname)

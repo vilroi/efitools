@@ -130,7 +130,7 @@ func ParseLoadOption(data []byte) EfiLoadOption {
 	//The description is an array of 2 byte wide characters
 	var offset int
 	for i := 0; ; i += 2 {
-		if data[i] == 0 && data[i] == 0 {
+		if data[i] == 0 && data[i+1] == 0 {
 			offset += 2
 			break
 		}

@@ -1,10 +1,11 @@
-all: check build
+SUBDIRS := $(wildcard cmd/*)
 
-check:
-	go vet ./...
+all: $(SUBDIRS)
 
-build:
-	go build cmd/*
+$(SUBDIRS):
+	$(MAKE) -C $@
 
 clean:
-	find -not -path "*.git*" -type f -executable -exec rm {} \;
+	find -type f -not -path "*.git*" -executable -exec rm {} \;
+
+.PHONY: all $(SUBDIRS) clean

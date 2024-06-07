@@ -14,7 +14,7 @@ func main() {
 		usage(os.Args[0])
 	}
 
-	efivars := efitools.ReadEfiVars()
+	efivars := efitools.GetEfiVars()
 	efivar, ok := efivars.Search(os.Args[1])
 	if !ok {
 		err("'%s' cannot be found\n", os.Args[1])
