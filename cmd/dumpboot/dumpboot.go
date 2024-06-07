@@ -10,6 +10,16 @@ import (
 func main() {
 	efivars := efitools.GetEfiVars()
 
+	bootvars := extractBootVars(efivars)
+	for i, bootvar := range bootvars {
+		fmt.Printf("%s: ", bootvar.Name)
+		loadopt := efitools.ParseLoadOption(bootvar.Data)
+		fmt.Printf("%d: %s\n", i, loadopt.Desc)
+		//fmt.Printf("%d: %s\n", i, string(loadopt.OptData))
+	}
+}
+
+func extractBootVars(efivars efitools.EfiVars) efitools.EfiVars {
 	bootorder, ok := efivars.Search("BootOrder")
 	if !ok {
 		err("failed to get BootOrder")
@@ -27,16 +37,14 @@ func main() {
 			continue
 		}
 		bootvars = append(bootvars, bootvar)
+
+		// Debug
 		fmt.Printf("%d. %s\n", ordernum, varname)
 		ordernum++
 	}
 
-	for i, bootvar := range bootvars {
-		fmt.Printf("%s: ", bootvar.Name)
-		loadopt := efitools.ParseLoadOption(bootvar.Data)
-		fmt.Printf("%d: %s\n", i, loadopt.Desc)
-		//fmt.Printf("%d: %s\n", i, string(loadopt.OptData))
-	}
+	return bootvars
+
 }
 
 func err(format string, a ...any) {
