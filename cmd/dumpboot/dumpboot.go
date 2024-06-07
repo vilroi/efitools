@@ -34,7 +34,7 @@ func extractBootVars(efivars efitools.EfiVars) efitools.EfiVars {
 
 		bootvar, ok := efivars.Search(varname)
 		if !ok {
-			fmt.Fprintf(os.Stderr, "Boot variable %s not found\n", varname)
+			//fmt.Fprintf(os.Stderr, "Boot variable %s not found\n", varname)
 			continue
 		}
 		bootvars = append(bootvars, bootvar)
